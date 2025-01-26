@@ -1,0 +1,13 @@
+ /* Стили для кнопок навигации */
+.nav-link.btn-light {
+    background-color: #f8f9fa; /* Светлый фон */
+    color: #000; /* Темный текст */
+    border: 1px solid #ddd; /* Граница для кнопок */
+}
+.nav-link.btn-light:hover {
+    background-color: #e9ecef; /* Серый фон при наведении */
+    color: #000; /* Темный текст при наведении */
+}
+.statistics-section{
+    display: none;
+}
