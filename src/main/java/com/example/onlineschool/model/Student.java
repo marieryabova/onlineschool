@@ -1,25 +1,87 @@
 package com.example.onlineschool.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
+/**
+ * Сущность, представляющая ученика.
+ 
+ * Содержит персональные данные ученика, контактную информацию
+ * и сведения о его учебной активности. Связана с учетной записью пользователя.
+ *
+ * @see Entity
+ * @see Data
+ * @see User
+ */
 @Entity
 @Data
 public class Student {
-    private Integer ID;
-    private String FirstName;
-    private String LastName;
-    private String Surname;
-    private String Email;
-    private String Phone;
-    private Integer CourseNumber;
 
+    /**
+     * Уникальный идентификатор ученика в системе.
+     
+     * Генерируется автоматически базой данных при создании записи.
+     * Используется как первичный ключ таблицы студентов.
+     
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer getID() {
-        return ID;
-    }
+    private Integer id;
+
+    /**
+     * Имя ученика.
+     * Обязательное поле. Должно содержать только буквенные символы.
+     */
+    private String firstName;
+
+    /**
+     * Фамилия ученика.
+     * Обязательное поле. Должно содержать только буквенные символы.
+     * Используется для официального именования студента.
+     
+     */
+    private String lastName;
+
+    /**
+     * Отчество ученика.
+     * При наличии должно содержать только буквенные символы.
+     
+     */
+    private String surname;
+
+    /**
+     * Актуальная электронная почта ученика.
+     * Должна быть уникальной для каждого ученика.
+     * Должна соответствовать стандартному формату email.
+     * Используется для учебной коммуникации.
+     */
+    private String email;
+
+    /**
+     * Контактный телефон ученика.
+     * Должен содержать номер в международном формате.
+     * Используется для экстренной связи.
+     
+     */
+    private String phone;
+
+    /**
+     * Количество курсов, на которые записан ученик.
+     * Вычисляется автоматически на основе данных о записях на курсы.
+     * Обновляется при изменении состава курсов студента.
+     
+     */
+    @Formula("(SELECT COUNT(cs.id) FROM course_student cs WHERE cs.student_id = id)")
+    private Integer courseNumber;
+
+    /**
+     * Учетная запись пользователя, связанная со учеником.
+     * Обеспечивает связь между данными ученика и системой аутентификации.
+     * Связь один-к-одному с сущностью {@link User}.
+     
+     */
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

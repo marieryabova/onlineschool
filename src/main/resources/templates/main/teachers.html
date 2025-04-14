@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Информационно-справочная система онлайн-школы</title>
@@ -11,24 +11,7 @@
     <h1 class="text-center mb-4">Информационно-справочная система онлайн-школы</h1>
     <h2 class="text-center mb-4">Преподаватели</h2>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <div class="container-fluid">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/about">Об авторе</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/students">Ученики</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/courses">Курсы</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <div th:replace="index::navbar"></div>
 
     <div class="row mb-4">
         <div class="col-md-3">
@@ -69,10 +52,25 @@
     <div class="row mb-4">
         <div class="col-md-8 offset-md-2">
             <h3 class="mb-3">Поиск преподавателя по любому критерию:</h3>
-            <form th:action="@{/teachers}" class="d-flex">
-                <input type="text" name="keyword" id="keyword" class="form-control me-2" th:value="${keyword}" required/>
-                <button type="submit" class="btn btn-primary">Поиск</button>
-                <button type="button" class="btn btn-secondary ms-2" onclick="clearSearch()">Очистить</button>
+            <form th:action="@{/main/teachers}" method="get" class="bg-light p-4 rounded shadow-sm">
+                <div class="row align-items-end">
+                    <div class="col-md-8">
+                        <label for="keyword" class="form-label">Ключевое слово:</label>
+                        <div class="input-group">
+                            <input type="text" name="keyword" id="keyword" class="form-control"
+                                   th:value="${keyword}" placeholder="Введите для поиска"/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2 ps-md-3">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            Отправить
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary flex-grow-1" onclick="clearSearch()">
+                            Очистить
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -88,12 +86,14 @@
             <th scope="col">Телефон преподавателя</th>
             <th scope="col">Специализация</th>
             <th scope="col">Опыт работы</th>
-            <th scope="col">Действия</th>
+            <div sec:authorize="hasRole('ADMIN')">
+                <th scope="col">Действия</th>
+            </div>
         </tr>
         </thead>
         <tbody>
         <tr th:each="teacher: ${teacherList}">
-            <td th:text="${teacher.ID}"></td>
+            <td th:text="${teacher.id}"></td>
             <td th:text="${teacher.lastName}"></td>
             <td th:text="${teacher.firstName}"></td>
             <td th:text="${teacher.surname}"></td>
@@ -101,20 +101,26 @@
             <td th:text="${teacher.phone}"></td>
             <td th:text="${teacher.specialization}"></td>
             <td th:text="${teacher.experience}"></td>
-            <td>
-                <div class="d-flex gap-2">
-                    <a th:href="@{'/delete_teacher/' + ${teacher.ID}}" class="btn btn-danger btn-sm">Удалить</a>
-                    <a th:href="@{'/edit_teacher/' + ${teacher.ID}}" class="btn btn-primary btn-sm ms-2">Редактировать</a>
-                </div>
-            </td>
+            <div sec:authorize="hasRole('ADMIN')">
+                <td>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{'/delete/delete_teacher/' + ${teacher.id}}" class="btn btn-danger btn-sm">Удалить</a>
+                        <a th:href="@{'/edit/edit_teacher/' + ${teacher.id}}" class="btn btn-primary btn-sm ms-2">Редактировать</a>
+                    </div>
+                </td>
+            </div>
         </tr>
         </tbody>
     </table>
 
-    <div class="text-center mt-4">
-        <a href="/new_teacher" class="btn btn-primary">Добавить преподавателя</a>
+    <div sec:authorize="hasRole('ADMIN')">
+        <div class="text-center mt-4">
+            <a href="/new/new_teacher" class="btn btn-primary">Добавить преподавателя</a>
+        </div>
     </div>
 </div>
+
+<footer th:replace="index::footer"></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
@@ -123,13 +129,13 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript">
     function clearSearch() {
-        window.location = "[[@{/teachers}]]"
+        window.location = "[[@{/main/teachers}]]"
     }
     $(document).ready(function () {
         $('#teacherTable').DataTable({
             "searching": false,
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/Russian.json"
+                "url": 'https://cdn.datatables.net/plug-ins/1.13.1/i18n/ru.json'
             }
         });
     });

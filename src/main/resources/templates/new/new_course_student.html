@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Информационно-справочная система онлайн-школы</title>
+  <header th:replace="index::head"></header>
+</head>
+
+<body>
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Информационно-справочная система онлайн-школы</h1>
+  <h2 class="text-center mb-4">Курсы-Студенты</h2>
+
+  <div th:replace="index::navbar"></div>
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <form th:action="@{/save/save_course_student}" th:object="${courseStudent}" method="post" class="card p-4">
+        <h3 class="mb-4">Добавление новой записи</h3>
+        <div class="mb-3">
+          <label for="course" class="form-label">Курс</label>
+          <select th:field="*{course.id}" class="form-select" id="course" required>
+            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.title}"></option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="student" class="form-label">Ученик</label>
+          <select th:field="*{student.id}" class="form-select" id="student" required>
+            <option th:each="student : ${students}" th:value="${student.id}" th:text="${student.firstName
+            + ' ' + student.lastName}"></option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="payment_status" class="form-label">Статус оплаты</label>
+          <input type="text" th:field="*{paymentStatus}" class="form-control" id="payment_status" required>
+        </div>
+        <div class="mb-3">
+          <label for="course_completion_status" class="form-label">Статус прохождения</label>
+          <input type="text" th:field="*{courseCompletionStatus}" class="form-control"
+                 id="course_completion_status" required>
+        </div>
+        <div class="mb-3">
+          <label for="certificate_info" class="form-label">Информация о сертификате</label>
+          <input type="text" th:field="*{certificateInfo}" class="form-control"
+                 id="certificate_info" required>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="/main/course_students" class="btn btn-primary">К списку записей</a>
+    <a href="/index" class="btn btn-primary">На главную</a>
+  </div>
+</div>
+
+<footer th:replace="index::footer"></footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

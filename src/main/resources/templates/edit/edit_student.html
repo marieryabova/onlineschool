@@ -11,35 +11,15 @@
     <h1 class="text-center mb-4">Информационно-справочная система онлайн-школы</h1>
     <h2 class="text-center mb-4">Ученики</h2>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <div class="container-fluid">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/about">Об авторе</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/students">Ученики</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/teachers">Преподаватели</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-light me-2" href="/courses">Курсы</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <div th:replace="index::navbar"></div>
 
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <form th:action="@{/save_student}" th:object="${student}" method="post" class="card p-4">
+            <form th:action="@{/save/save_student}" th:object="${student}" method="post" class="card p-4">
                 <h3 class="mb-4">Редактировать ученика</h3>
                 <div class="mb-3">
                     <label for="id" class="form-label">ID ученика</label>
-                    <input type="number" th:field="*{ID}" class="form-control" id="id" readonly="readonly" required>
+                    <input type="number" th:field="*{id}" class="form-control" id="id" readonly="readonly" required>
                 </div>
                 <div class="mb-3">
                     <label for="lastName" class="form-label">Фамилия ученика</label>
@@ -61,10 +41,6 @@
                     <label for="phone" class="form-label">Телефон ученика</label>
                     <input type="text" th:field="*{phone}" class="form-control" id="phone">
                 </div>
-                <div class="mb-3">
-                    <label for="courseNumber" class="form-label">Количество курсов</label>
-                    <input type="number" th:field="*{courseNumber}" class="form-control" id="courseNumber">
-                </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
@@ -73,9 +49,12 @@
     </div>
 
     <div class="text-center mt-4">
-        <a href="/" class="btn btn-primary">Назад</a>
+        <a href="/main/students" class="btn btn-primary">К списку учеников</a>
+        <a href="/index" class="btn btn-primary">На главную</a>
     </div>
 </div>
+
+<footer th:replace="index::footer"></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
